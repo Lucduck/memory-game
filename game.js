@@ -1,5 +1,6 @@
 window.onload = function () {
   var tileSize = 80
+  var tileSizeScreen = 160
   var numRows = 4
   var numCols = 5
   var tileSpacing = 10
@@ -12,21 +13,27 @@ window.onload = function () {
   var timeLeft
   var tilesLeft
   var checked
-  var game = new Phaser.Game(500, 500)
+  var game = new Phaser.Game(1280, 720)
   var playGame = function (game) {}
+  // game.load.image('background', 'assets/sprites/background.jpg')
+  // game.add.image(0, 0, 'background')
   playGame.prototype = {
     scoreText: null,
     timeText: null,
     soundArray: [],
     preload: function () {
+      game.load.image('background', 'assets/sprites/background.jpg')
       game.load.spritesheet('tiles', 'assets/sprites/tiles.png', tileSize, tileSize)
     },
     create: function () {
+      console.log(game.world.centerX)
+      console.log(game.world.centerY)
       score = 0
       timeLeft = 60
       this.checked = true
       // add.image(x, y, key)
       // game.add.image(0, 0, 'tiles')
+      game.add.sprite(0, 0, 'background')
       this.placeTiles()
       // console.log("That's my awesome game")
       if (playSound) {
@@ -46,9 +53,9 @@ window.onload = function () {
     },
     placeTiles: function () {
       tilesLeft = numRows * numCols
-      var leftSpace = (game.width - (numCols * tileSize) - ((numCols - 1) *
+      var leftSpace = (game.width - (numCols * tileSizeScreen) - ((numCols - 1) *
         tileSpacing)) / 2
-      var topSpace = (game.height - (numRows * tileSize) - ((numRows - 1) *
+      var topSpace = (game.height - (numRows * tileSizeScreen) - ((numRows - 1) *
         tileSpacing)) / 2
       for (var i = 0; i < numRows * numCols; i++) {
         tilesArray.push(Math.floor(i / 2))
@@ -65,9 +72,10 @@ window.onload = function () {
       for (i = 0; i < numCols; i++) {
         for (var j = 0; j < numRows; j++) {
           // add.button(x, y, key, callback, callbackContext)
-          var tile = game.add.button(leftSpace + i * (tileSize + tileSpacing), topSpace + j * (tileSize + tileSpacing), 'tiles', this.showTile, this)
+          var tile = game.add.button(leftSpace + i * (tileSizeScreen + tileSpacing), topSpace + j * (tileSizeScreen + tileSpacing), 'tiles', this.showTile, this)
           tile.frame = 10
-          // tile.width = 40
+          tile.width = tileSizeScreen
+          tile.height = tileSizeScreen
           tile.value = tilesArray[j * numCols + i]
         // console.log(tile.value)
         }
@@ -85,7 +93,7 @@ window.onload = function () {
         this.checked = false
         game.time.events.add(500, this.checkTiles, this)
       }
-      console.log('this tile has value = ' + target.value)
+    // console.log('this tile has value = ' + target.value)
     },
     checkTiles: function () {
       if (selectedArray[0].value === selectedArray[1].value) {
@@ -132,6 +140,17 @@ window.onload = function () {
       game.load.audio('wrong', ['assets/sounds/wrong.mp3', 'assets/sounds/wrong.ogg'])
     },
     create: function () {
+      function gofull () {
+        if (game.scale.isFullScreen) {
+          game.scale.stopFullScreen()
+        } else {
+          game.scale.startFullScreen(false)
+        }
+      }
+      game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT
+      //var key1 = game.input.keyboard.addKey(Phaser.Keyboard.ONE)
+      //key1.onDown.add(gofull, this)
+      game.input.onDown.add(gofull, this)
       game.scale.pageAlignHorizontally = true
       game.scale.pageAlignVertically = true
       game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
@@ -163,6 +182,17 @@ window.onload = function () {
   var gameOver = function (game) {}
   gameOver.prototype = {
     create: function () {
+      function gofull () {
+        if (game.scale.isFullScreen) {
+          game.scale.stopFullScreen()
+        } else {
+          game.scale.startFullScreen(false)
+        }
+      }
+      game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT
+      //var key1 = game.input.keyboard.addKey(Phaser.Keyboard.ONE)
+      //key1.onDown.add(gofull, this)
+      game.input.onDown.add(gofull, this)
       highScore = Math.max(score, highScore)
       localStorage.setItem(localStorageName, highScore)
       var style = {
