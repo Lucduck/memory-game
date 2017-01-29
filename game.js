@@ -23,18 +23,27 @@ window.onload = function () {
     timeText: null,
     soundArray: [],
     preload: function () {
-      game.load.image('background', 'assets/sprites/background.jpg')
+      game.load.image('background', 'assets/sprites/background1.png')
+      game.load.image('textPoints', 'assets/sprites/textPoints.png')
       game.load.spritesheet('tiles', 'assets/sprites/tiles.png', tileSize, tileSize)
     },
     create: function () {
-      console.log(game.world.centerX)
-      console.log(game.world.centerY)
+      // console.log(game.world.centerX)
+      // console.log(game.world.centerY)
       score = 0
       timeLeft = 60
       this.checked = true
       // add.image(x, y, key)
       // game.add.image(0, 0, 'tiles')
-      game.add.sprite(0, 0, 'background')
+      var background = game.add.sprite(0, -30, 'background')
+      background.width = game.width
+      background.height = game.height + 50
+      var textpoints = game.add.sprite(0, game.height - 150, 'textPoints')
+      textpoints.width = 200
+      textpoints.height = 150
+      textpoints = game.add.sprite(0, 0, 'textPoints')
+      textpoints.width = 200
+      textpoints.height = 150
       this.placeTiles()
       // console.log("That's my awesome game")
       if (playSound) {
@@ -43,13 +52,14 @@ window.onload = function () {
         this.soundArray[2] = game.add.audio('wrong', 1)
       }
       var style = {
-        font: '32px Monospace',
-        fill: '#00ff00',
-        align: 'center'
+        fontSize: '50px',
+        align: 'center',
+        boundsAlignH: 'center'
       }
-      this.scoreText = game.add.text(5, 5, 'Score: ' + score, style)
-      this.timeText = game.add.text(5, game.height - 5, 'Time left: ' + timeLeft, style)
+      this.scoreText = game.add.text(10, 20, 'SCORE\n' + score, style)
+      this.timeText = game.add.text(37, game.height - 7, 'TIME\n' + timeLeft, style)
       this.timeText.anchor.set(0, 1)
+      textpoints.width = 200
       game.time.events.loop(Phaser.Timer.SECOND, this.decreaseTime, this)
     },
     placeTiles: function () {
@@ -103,8 +113,8 @@ window.onload = function () {
         }
         score++
         timeLeft += 2
-        this.timeText.text = 'Time left: ' + timeLeft
-        this.scoreText.text = 'Score: ' + score
+        this.timeText.text = 'TIME\n' + timeLeft
+        this.scoreText.text = 'SCORE\n' + score
         selectedArray[0].destroy()
         selectedArray[1].destroy()
         tilesLeft -= 2
@@ -125,7 +135,7 @@ window.onload = function () {
     },
     decreaseTime: function () {
       timeLeft--
-      this.timeText.text = 'Time left: ' + timeLeft
+      this.timeText.text = 'TIME\n' + timeLeft
       if (timeLeft === 0) {
         game.state.start('GameOver')
       }
@@ -135,7 +145,7 @@ window.onload = function () {
   var titleScreen = function (game) {}
   titleScreen.prototype = {
     preload: function () {
-      game.load.image('background', 'assets/sprites/background.jpg')
+      game.load.image('background', 'assets/sprites/background1.png')
       game.load.spritesheet('soundIcons', 'assets/sprites/soundiconsLight.png', 50, 48)
       game.load.image('startIcon', 'assets/sprites/startLight.png')
       game.load.image('screenIcon', 'assets/sprites/screenLight.png')
@@ -186,20 +196,22 @@ window.onload = function () {
       var text = game.add.text(game.width / 2, game.height / 2 - 100, 'Crack Alien Code', style)
       text.anchor.set(0.5)
       */
-      game.add.sprite(0, 0, 'background')
+      var background = game.add.sprite(0, -30, 'background')
+      background.width = game.width
+      background.height = game.height + 50
       var text = game.add.sprite(game.width / 2, game.height / 2 - 200, 'title')
       text.anchor.set(0.5)
       text.width = 1200
       text.height = 200
-      soundButton = game.add.button(game.width / 2 - 100, game.height / 2 + 20, 'soundIcons', this.soundGame, this)
+      soundButton = game.add.button(game.width / 2 - 100, game.height / 2 + 170, 'soundIcons', this.soundGame, this)
       soundButton.anchor.set(0.5)
       soundButton.width = 80
       soundButton.height = 80
-      var screenSize = game.add.button(game.width / 2 + 100, game.height / 2 + 20, 'screenIcon', this.screenGame)
+      var screenSize = game.add.button(game.width / 2 + 100, game.height / 2 + 170, 'screenIcon', this.screenGame)
       screenSize.anchor.set(0.5)
       screenSize.width = 80
       screenSize.height = 80
-      var start = game.add.button(game.width / 2, game.height / 2 + 170, 'startIcon', this.startGame)
+      var start = game.add.button(game.width / 2, game.height / 2 + 20, 'startIcon', this.startGame)
       start.anchor.set(0.5)
       start.width = 200
       start.height = 80
