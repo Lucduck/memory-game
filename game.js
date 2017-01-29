@@ -136,8 +136,9 @@ window.onload = function () {
   titleScreen.prototype = {
     preload: function () {
       game.load.image('background', 'assets/sprites/background.jpg')
-      game.load.spritesheet('soundicons', 'assets/sprites/soundiconsLight.png', 50, 48)
-      game.load.image('startButton', 'assets/sprites/startLight.png')
+      game.load.spritesheet('soundIcons', 'assets/sprites/soundiconsLight.png', 50, 48)
+      game.load.image('startIcon', 'assets/sprites/startLight.png')
+      game.load.image('screenIcon', 'assets/sprites/screenLight.png')
       game.load.image('title', 'assets/sprites/MemoryLight.png')
       game.load.audio('select', ['assets/sounds/select.mp3', 'assets/sounds/select.ogg'])
       game.load.audio('right', ['assets/sounds/right.mp3', 'assets/sounds/right.ogg'])
@@ -151,8 +152,8 @@ window.onload = function () {
         } else {
           game.scale.startFullScreen(false)
         }
-      }
-      game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT*/
+      }*/
+      game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT
       // var key1 = game.input.keyboard.addKey(Phaser.Keyboard.ONE)
       // key1.onDown.add(gofull, this)
       // game.input.onDown.add(gofull, this)
@@ -174,11 +175,15 @@ window.onload = function () {
       text.anchor.set(0.5)
       text.width = 1200
       text.height = 200
-      soundButton = game.add.button(game.width / 2 - 100, game.height / 2 + 20, 'soundicons', this.soundGame, this)
+      soundButton = game.add.button(game.width / 2 - 100, game.height / 2 + 20, 'soundIcons', this.soundGame, this)
       soundButton.anchor.set(0.5)
       soundButton.width = 80
       soundButton.height = 80
-      var start = game.add.button(game.width / 2, game.height / 2 + 170, 'startButton', this.startGame)
+      var screenSize = game.add.button(game.width / 2 + 100, game.height / 2 + 20, 'screenIcon', this.screenGame)
+      screenSize.anchor.set(0.5)
+      screenSize.width = 80
+      screenSize.height = 80
+      var start = game.add.button(game.width / 2, game.height / 2 + 170, 'startIcon', this.startGame)
       start.anchor.set(0.5)
       start.width = 200
       start.height = 80
@@ -190,6 +195,13 @@ window.onload = function () {
       } else {
         playSound = false
         soundButton.frame = 1
+      }
+    },
+    screenGame: function (target) {
+      if (game.scale.isFullScreen) {
+        game.scale.stopFullScreen()
+      } else {
+        game.scale.startFullScreen(false)
       }
     },
     startGame: function (target) {
