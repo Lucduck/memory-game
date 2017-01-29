@@ -17,9 +17,10 @@ window.onload = function () {
   var delay = 0
   var delayEvent
   var game = new Phaser.Game(1280, 720)
-  var playGame = function (game) {}
   // game.load.image('background', 'assets/sprites/background.jpg')
   // game.add.image(0, 0, 'background')
+
+  var playGame = function (game) {}
   playGame.prototype = {
     scoreText: null,
     timeText: null,
@@ -39,10 +40,12 @@ window.onload = function () {
       var background = game.add.sprite(0, -30, 'background')
       background.width = game.width
       background.height = game.height + 50
-      var textpoints = game.add.sprite(0, game.height - 150, 'textPoints')
+      var textpoints = game.add.sprite(110, 85, 'textPoints')
+      textpoints.anchor.set(0.5)
       textpoints.width = 200
       textpoints.height = 150
-      textpoints = game.add.sprite(0, 0, 'textPoints')
+      textpoints = game.add.sprite(game.width - 110, 85, 'textPoints')
+      textpoints.anchor.set(0.5)
       textpoints.width = 200
       textpoints.height = 150
       this.placeTiles()
@@ -73,10 +76,12 @@ window.onload = function () {
         align: 'center',
         boundsAlignH: 'center'
       }
-      this.scoreText = game.add.text(10, 20, 'SCORE\n' + score, style)
-      this.timeText = game.add.text(37, game.height - 7, 'TIME\n' + timeLeft, style)
-      this.timeText.anchor.set(0, 1)
-      textpoints.width = 200
+      this.scoreText = game.add.text(110, 92, 'SCORE\n' + score, style)
+      this.scoreText.anchor.set(0.5)
+      this.scoreText.lineSpacing = 7
+      this.timeText = game.add.text(game.width - 110, 92, 'TIME\n' + timeLeft, style)
+      this.timeText.anchor.set(0.5)
+      this.timeText.lineSpacing = 7
       var counter = game.time.events.loop(Phaser.Timer.SECOND, this.decreaseTime, this) // Phaser.Timer.SECOND
     },
     placeTiles: function () {
