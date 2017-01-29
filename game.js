@@ -158,7 +158,7 @@ window.onload = function () {
       // key1.onDown.add(gofull, this)
       // game.input.onDown.add(gofull, this)
       game.scale.pageAlignHorizontally = true
-      game.scale.pageAlignVertically = false
+      game.scale.pageAlignVertically = true
       game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
       game.stage.disableVisibilityChange = true
       /*
