@@ -38,8 +38,8 @@ window.onload = function () {
       this.checked = true
       // add.image(x, y, key)
       // game.add.image(0, 0, 'tiles')
-      var background = game.add.sprite(0, -30, 'background')
-      background.width = game.width
+      var background = game.add.sprite(-65, -30, 'background')
+      background.width = game.width + 115
       background.height = game.height + 50
       var textpoints = game.add.sprite(110, 85, 'textPoints')
       textpoints.anchor.set(0.5)
@@ -213,8 +213,8 @@ window.onload = function () {
       var text = game.add.text(game.width / 2, game.height / 2 - 100, 'Crack Alien Code', style)
       text.anchor.set(0.5)
       */
-      var background = game.add.sprite(0, -30, 'background')
-      background.width = game.width
+      var background = game.add.sprite(-65, -30, 'background')
+      background.width = game.width + 115
       background.height = game.height + 50
       var text = game.add.sprite(game.width / 2, game.height / 2 - 200, 'title')
       text.anchor.set(0.5)
@@ -269,8 +269,8 @@ window.onload = function () {
       highScore = Math.max(score, highScore)
       localStorage.setItem(localStorageName, highScore)
 
-      var background = game.add.sprite(0, -30, 'background')
-      background.width = game.width
+      var background = game.add.sprite(-65, -30, 'background')
+      background.width = game.width + 115
       background.height = game.height + 50
       var textpoints = game.add.sprite(game.width / 2 - 150, game.height / 2, 'textPoints')
       textpoints.anchor.set(0.5)
