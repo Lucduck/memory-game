@@ -10,6 +10,7 @@ window.onload = function () {
   var selectedArray = []
   var soundButton
   var playSound = true
+  var screenButton
   var score
   var timeLeft
   var tilesLeft
@@ -167,9 +168,7 @@ window.onload = function () {
   var titleScreen = function (game) {}
   titleScreen.prototype = {
     preload: function () {
-      game.load.spritesheet('soundIcons', 'assets/sprites/soundiconsLight.png', 50, 48)
       game.load.image('startIcon', 'assets/sprites/startLight.png')
-      game.load.image('screenIcon', 'assets/sprites/screenLight.png')
       game.load.image('title', 'assets/sprites/MemoryLight.png')
     },
     create: function () {
@@ -219,20 +218,20 @@ window.onload = function () {
       background.height = game.height + 50
       var text = game.add.sprite(game.width / 2, game.height / 2 - 200, 'title')
       text.anchor.set(0.5)
-      text.width = 1200
-      text.height = 200
-      soundButton = game.add.button(game.width / 2 - 100, game.height / 2 + 170, 'soundIcons', this.soundGame, this)
+      text.width = 1000
+      text.height = 167
+      soundButton = game.add.button(game.width / 2 - 100, game.height / 2 + 250, 'soundIcons', this.soundGame, this)
       soundButton.anchor.set(0.5)
-      soundButton.width = 80
-      soundButton.height = 80
-      var screenSize = game.add.button(game.width / 2 + 100, game.height / 2 + 170, 'screenIcon', this.screenGame)
-      screenSize.anchor.set(0.5)
-      screenSize.width = 80
-      screenSize.height = 80
+      soundButton.width = 120
+      soundButton.height = 120
+      screenButton = game.add.button(game.width / 2 + 100, game.height / 2 + 250, 'screenIcon', this.screenGame)
+      screenButton.anchor.set(0.5)
+      screenButton.width = 120
+      screenButton.height = 120
       var start = game.add.button(game.width / 2, game.height / 2 + 20, 'startIcon', this.startGame)
       start.anchor.set(0.5)
-      start.width = 200
-      start.height = 80
+      start.width = 400
+      start.height = 160
     },
     soundGame: function (target) {
       if (target.frame === 1) {
@@ -246,8 +245,10 @@ window.onload = function () {
     screenGame: function (target) {
       if (game.scale.isFullScreen) {
         game.scale.stopFullScreen()
+        screenButton.frame = 0
       } else {
         game.scale.startFullScreen(false)
+        screenButton.frame = 1
       }
     },
     startGame: function (target) {
@@ -329,8 +330,10 @@ window.onload = function () {
         'assets/sounds/chipsCollide2.ogg']) // BIEN
       game.load.audio('wrong', ['assets/sounds/chipsCollide3.mp3',
         'assets/sounds/chipsCollide3.ogg']) // MAL
-      game.load.spritesheet('soundIcons', 'assets/sprites/soundicons.png', 80,
-        80)
+      game.load.spritesheet('soundIcons', 'assets/sprites/soundiconsLight.png', 200,
+        192)
+      game.load.spritesheet('screenIcon', 'assets/sprites/screenLight.png', 200,
+        192)
     },
     create: function () {
       game.state.start('TitleScreen')
