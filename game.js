@@ -9,7 +9,7 @@ window.onload = function () {
   var tilesArray = []
   var selectedArray = []
   var soundButton
-  var playSound
+  var playSound = true
   var score
   var timeLeft
   var tilesLeft
@@ -166,9 +166,6 @@ window.onload = function () {
       game.load.image('startIcon', 'assets/sprites/startLight.png')
       game.load.image('screenIcon', 'assets/sprites/screenLight.png')
       game.load.image('title', 'assets/sprites/MemoryLight.png')
-      game.load.audio('select', ['assets/sounds/select.mp3', 'assets/sounds/select.ogg'])
-      game.load.audio('right', ['assets/sounds/right.mp3', 'assets/sounds/right.ogg'])
-      game.load.audio('wrong', ['assets/sounds/wrong.mp3', 'assets/sounds/wrong.ogg'])
     },
     create: function () {
       /*
@@ -321,13 +318,13 @@ window.onload = function () {
       game.load.image('background', 'assets/sprites/background1.png')
       game.load.spritesheet('tiles', 'assets/sprites/tiles.png', tileSize,
         tileSize)
-      game.load.audio('select', ['assets/sounds/select.mp3',
-        'assets/sounds/select.ogg'])
-      game.load.audio('right', ['assets/sounds/right.mp3',
-        'assets/sounds/right.ogg'])
-      game.load.audio('wrong', ['assets/sounds/wrong.mp3',
-        'assets/sounds/wrong.ogg'])
-      game.load.spritesheet('soundicons', 'assets/sprites/soundicons.png', 80,
+      game.load.audio('select', ['assets/sounds/chipsCollide1.mp3',
+        'assets/sounds/chipsCollide2.ogg']) // CLICK
+      game.load.audio('right', ['assets/sounds/chipsCollide2.mp3',
+        'assets/sounds/chipsCollide2.ogg']) // BIEN
+      game.load.audio('wrong', ['assets/sounds/chipsCollide3.mp3',
+        'assets/sounds/chipsCollide3.ogg']) // MAL
+      game.load.spritesheet('soundIcons', 'assets/sprites/soundicons.png', 80,
         80)
     },
     create: function () {
