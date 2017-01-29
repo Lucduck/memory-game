@@ -160,9 +160,9 @@ window.onload = function () {
       game.scale.pageAlignHorizontally = true
       game.scale.pageAlignVertically = true
       game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
-      game.stage.disableVisibilityChange = true
+      // game.stage.disableVisibilityChange = true
 
-
+      // Forzar girar pantalla
       function handleIncorrect () {
         if (!game.device.desktop) {
           document.getElementById('turn').style.display = 'block'
@@ -174,8 +174,7 @@ window.onload = function () {
           document.getElementById('turn').style.display = 'none'
         }
       }
-      // Forzar girar pantalla
-      game.scale.forceOrientation(false, true)
+      game.scale.forceOrientation(true, false)
       game.scale.enterIncorrectOrientation.add(handleIncorrect)
       game.scale.leaveIncorrectOrientation.add(handleCorrect)
       /*
