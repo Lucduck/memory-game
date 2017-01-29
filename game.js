@@ -14,6 +14,8 @@ window.onload = function () {
   var timeLeft
   var tilesLeft
   var checked
+  var delay = 0
+  var delayEvent
   var game = new Phaser.Game(1280, 720)
   var playGame = function (game) {}
   // game.load.image('background', 'assets/sprites/background.jpg')
@@ -23,7 +25,6 @@ window.onload = function () {
     timeText: null,
     soundArray: [],
     preload: function () {
-      game.load.image('background', 'assets/sprites/background1.png')
       game.load.image('textPoints', 'assets/sprites/textPoints.png')
       game.load.spritesheet('tiles', 'assets/sprites/tiles.png', tileSize, tileSize)
     },
@@ -46,6 +47,22 @@ window.onload = function () {
       textpoints.height = 150
       this.placeTiles()
       // console.log("That's my awesome game")
+      function handleIncorrect () {
+        if (!game.device.desktop) {
+          counter.timer.pause()
+          document.getElementById('turn').style.display = 'block'
+        }
+      }
+
+      function handleCorrect () {
+        if (!game.device.desktop) {
+          counter.timer.resume()
+          document.getElementById('turn').style.display = 'none'
+        }
+      }
+      game.scale.forceOrientation(true, false)
+      game.scale.enterIncorrectOrientation.add(handleIncorrect)
+      game.scale.leaveIncorrectOrientation.add(handleCorrect)
       if (playSound) {
         this.soundArray[0] = game.add.audio('select', 1)
         this.soundArray[1] = game.add.audio('right', 1)
@@ -60,7 +77,7 @@ window.onload = function () {
       this.timeText = game.add.text(37, game.height - 7, 'TIME\n' + timeLeft, style)
       this.timeText.anchor.set(0, 1)
       textpoints.width = 200
-      game.time.events.loop(Phaser.Timer.SECOND, this.decreaseTime, this)
+      var counter = game.time.events.loop(Phaser.Timer.SECOND, this.decreaseTime, this) // Phaser.Timer.SECOND
     },
     placeTiles: function () {
       tilesLeft = numRows * numCols
@@ -145,7 +162,6 @@ window.onload = function () {
   var titleScreen = function (game) {}
   titleScreen.prototype = {
     preload: function () {
-      game.load.image('background', 'assets/sprites/background1.png')
       game.load.spritesheet('soundIcons', 'assets/sprites/soundiconsLight.png', 50, 48)
       game.load.image('startIcon', 'assets/sprites/startLight.png')
       game.load.image('screenIcon', 'assets/sprites/screenLight.png')
@@ -239,28 +255,58 @@ window.onload = function () {
 
   var gameOver = function (game) {}
   gameOver.prototype = {
+    preload: function () {
+      game.load.image('textPoints', 'assets/sprites/textPoints.png')
+      game.load.image('restartIcon', 'assets/sprites/restartLight.png')
+    },
     create: function () {
-      function gofull () {
-        if (game.scale.isFullScreen) {
-          game.scale.stopFullScreen()
-        } else {
-          game.scale.startFullScreen(false)
-        }
-      }
       game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT
       // var key1 = game.input.keyboard.addKey(Phaser.Keyboard.ONE)
       // key1.onDown.add(gofull, this)
-      game.input.onDown.add(gofull, this)
       highScore = Math.max(score, highScore)
       localStorage.setItem(localStorageName, highScore)
+
+      var background = game.add.sprite(0, -30, 'background')
+      background.width = game.width
+      background.height = game.height + 50
+      var textpoints = game.add.sprite(game.width / 2 - 150, game.height / 2, 'textPoints')
+      textpoints.anchor.set(0.5)
+      textpoints.width = 200
+      textpoints.height = 150
+      textpoints = game.add.sprite(game.width / 2 + 150, game.height / 2, 'textPoints')
+      textpoints.anchor.set(0.5)
+      textpoints.width = 200
+      textpoints.height = 150
+
       var style = {
-        font: '32px Monospace',
-        fill: '#00ff00',
+        fontSize: '35px',
         align: 'center'
       }
-      var text = game.add.text(game.width / 2, game.height / 2, 'Game Over\n\nYour score: ' + score + '\nBest score: ' + highScore + '\n\nTap to restart', style)
+      var styleTitle = {
+        fontSize: '150px',
+        fill: '#333333',
+        align: 'center'
+      }
+      var text = game.add.text(game.width / 2, 150, 'Game Over', styleTitle)
       text.anchor.set(0.5)
-      game.input.onDown.add(this.restartGame, this)
+      text = game.add.text(game.width / 2 - 150, game.height / 2 + 17, 'Your score\n' + score, style)
+      text.anchor.set(0.5)
+      text.lineSpacing = 20
+      text = game.add.text(game.width / 2 + 150, game.height / 2 + 17, 'Best score\n' + highScore, style)
+      text.anchor.set(0.5)
+      text.lineSpacing = 20
+      delay = 0
+      delayEvent = game.time.events.loop(Phaser.Timer.SECOND, this.buttonRestart, this) // Phaser.Timer.SECOND
+    },
+    buttonRestart: function () {
+      delay++
+      if (delay === 1) {
+        var restart = game.add.button(game.width / 2, game.height / 2 + 200, 'restartIcon', this.restartGame)
+        restart.anchor.set(0.5)
+        restart.width = 200
+        restart.height = 80
+        delayEvent.timer.destroy()
+      }
     },
     restartGame: function () {
       tilesArray.length = 0
@@ -272,6 +318,7 @@ window.onload = function () {
   var preloadAssets = function (game) {}
   preloadAssets.prototype = {
     preload: function () {
+      game.load.image('background', 'assets/sprites/background1.png')
       game.load.spritesheet('tiles', 'assets/sprites/tiles.png', tileSize,
         tileSize)
       game.load.audio('select', ['assets/sounds/select.mp3',
