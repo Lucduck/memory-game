@@ -161,6 +161,23 @@ window.onload = function () {
       game.scale.pageAlignVertically = true
       game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
       game.stage.disableVisibilityChange = true
+
+
+      function handleIncorrect () {
+        if (!game.device.desktop) {
+          document.getElementById('turn').style.display = 'block'
+        }
+      }
+
+      function handleCorrect () {
+        if (!game.device.desktop) {
+          document.getElementById('turn').style.display = 'none'
+        }
+      }
+      // Forzar girar pantalla
+      game.scale.forceOrientation(false, true)
+      game.scale.enterIncorrectOrientation.add(handleIncorrect)
+      game.scale.leaveIncorrectOrientation.add(handleCorrect)
       /*
       var style = {
         font: '48px Monospace',
