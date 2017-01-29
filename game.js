@@ -8,6 +8,7 @@ window.onload = function () {
   var highScore
   var tilesArray = []
   var selectedArray = []
+  var soundButton
   var playSound
   var score
   var timeLeft
@@ -134,12 +135,16 @@ window.onload = function () {
   var titleScreen = function (game) {}
   titleScreen.prototype = {
     preload: function () {
-      game.load.spritesheet('soundicons', 'assets/sprites/soundicons.png', 80, 80)
+      game.load.image('background', 'assets/sprites/background.jpg')
+      game.load.spritesheet('soundicons', 'assets/sprites/soundiconsLight.png', 50, 48)
+      game.load.image('startButton', 'assets/sprites/startLight.png')
+      game.load.image('title', 'assets/sprites/MemoryLight.png')
       game.load.audio('select', ['assets/sounds/select.mp3', 'assets/sounds/select.ogg'])
       game.load.audio('right', ['assets/sounds/right.mp3', 'assets/sounds/right.ogg'])
       game.load.audio('wrong', ['assets/sounds/wrong.mp3', 'assets/sounds/wrong.ogg'])
     },
     create: function () {
+      /*
       function gofull () {
         if (game.scale.isFullScreen) {
           game.scale.stopFullScreen()
@@ -147,15 +152,15 @@ window.onload = function () {
           game.scale.startFullScreen(false)
         }
       }
-      game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT
-      //var key1 = game.input.keyboard.addKey(Phaser.Keyboard.ONE)
-      //key1.onDown.add(gofull, this)
-      game.input.onDown.add(gofull, this)
+      game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT*/
+      // var key1 = game.input.keyboard.addKey(Phaser.Keyboard.ONE)
+      // key1.onDown.add(gofull, this)
+      // game.input.onDown.add(gofull, this)
       game.scale.pageAlignHorizontally = true
-      game.scale.pageAlignVertically = true
+      game.scale.pageAlignVertically = false
       game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
       game.stage.disableVisibilityChange = true
-
+      /*
       var style = {
         font: '48px Monospace',
         fill: '#00ff00',
@@ -163,18 +168,31 @@ window.onload = function () {
       }
       var text = game.add.text(game.width / 2, game.height / 2 - 100, 'Crack Alien Code', style)
       text.anchor.set(0.5)
-      var soundButton = game.add.button(game.width / 2 - 100, game.height / 2 + 100, 'soundicons', this.startGame, this)
+      */
+      game.add.sprite(0, 0, 'background')
+      var text = game.add.sprite(game.width / 2, game.height / 2 - 200, 'title')
+      text.anchor.set(0.5)
+      text.width = 1200
+      text.height = 200
+      soundButton = game.add.button(game.width / 2 - 100, game.height / 2 + 20, 'soundicons', this.soundGame, this)
       soundButton.anchor.set(0.5)
-      soundButton = game.add.button(game.width / 2 + 100, game.height / 2 + 100, 'soundicons', this.startGame, this)
-      soundButton.frame = 1
-      soundButton.anchor.set(0.5)
+      soundButton.width = 80
+      soundButton.height = 80
+      var start = game.add.button(game.width / 2, game.height / 2 + 170, 'startButton', this.startGame)
+      start.anchor.set(0.5)
+      start.width = 200
+      start.height = 80
     },
-    startGame: function (target) {
-      if (target.frame === 0) {
+    soundGame: function (target) {
+      if (target.frame === 1) {
         playSound = true
+        soundButton.frame = 0
       } else {
         playSound = false
+        soundButton.frame = 1
       }
+    },
+    startGame: function (target) {
       game.state.start('PlayGame')
     }
   }
@@ -190,8 +208,8 @@ window.onload = function () {
         }
       }
       game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT
-      //var key1 = game.input.keyboard.addKey(Phaser.Keyboard.ONE)
-      //key1.onDown.add(gofull, this)
+      // var key1 = game.input.keyboard.addKey(Phaser.Keyboard.ONE)
+      // key1.onDown.add(gofull, this)
       game.input.onDown.add(gofull, this)
       highScore = Math.max(score, highScore)
       localStorage.setItem(localStorageName, highScore)
@@ -238,5 +256,3 @@ window.onload = function () {
   game.state.start('PreloadAssets')
 // game.state.start('PlayGame')
 }
-
-//  *********  PAGINA  ((    ))
