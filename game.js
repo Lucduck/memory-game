@@ -1,8 +1,9 @@
 window.onload = function () {
+  var typeGame = 2
   var tileSize = 80
   var tileSizeScreen = 160
-  var numRows = 4
-  var numCols = 5
+  var numRows
+  var numCols
   var tileSpacing = 10
   var localStorageName = 'crackalien'
   var highScore
@@ -11,6 +12,7 @@ window.onload = function () {
   var soundButton
   var playSound = true
   var screenButton
+  var typeGameButton
   var score
   var timeLeft
   var tilesLeft
@@ -35,6 +37,14 @@ window.onload = function () {
       // console.log(game.world.centerY)
       score = 0
       timeLeft = 60
+      if (typeGame === 2) { // X3
+        numRows = 4
+        numCols = 5
+      } else {
+        numRows = 3
+        numCols = 7
+      }
+
       this.checked = true
       // add.image(x, y, key)
       // game.add.image(0, 0, 'tiles')
@@ -87,12 +97,13 @@ window.onload = function () {
     },
     placeTiles: function () {
       tilesLeft = numRows * numCols
-      var leftSpace = (game.width - (numCols * tileSizeScreen) - ((numCols - 1) *
-        tileSpacing)) / 2
-      var topSpace = (game.height - (numRows * tileSizeScreen) - ((numRows - 1) *
-        tileSpacing)) / 2
+      var leftSpace = (game.width - (numCols * tileSizeScreen) - ((numCols - 1) * tileSpacing)) / 2
+      var topSpace = (game.height - (numRows * tileSizeScreen) - ((numRows - 1) * tileSpacing)) / 2
+      if (typeGame === 3) { // X3
+        topSpace += 80
+      }
       for (var i = 0; i < numRows * numCols; i++) {
-        tilesArray.push(Math.floor(i / 2))
+        tilesArray.push(Math.floor(i / typeGame)) // X3
       }
       for (i = 0; i < numRows * numCols; i++) {
         var from = game.rnd.between(0, tilesArray.length - 1)
@@ -116,31 +127,38 @@ window.onload = function () {
       }
     },
     showTile: function (target) {
-      if (selectedArray.length < 2 && selectedArray.indexOf(target) === -1) {
+      if (selectedArray.length < typeGame && selectedArray.indexOf(target) === -1) { // X3
         if (playSound) {
           this.soundArray[0].play()
         }
         target.frame = target.value
         selectedArray.push(target)
       }
-      if (selectedArray.length === 2 && this.checked === true) {
+      if (selectedArray.length === typeGame && checked === true) { // X3
         this.checked = false
         game.time.events.add(500, this.checkTiles, this)
       }
     // console.log('this tile has value = ' + target.value)
     },
     checkTiles: function () {
-      if (selectedArray[0].value === selectedArray[1].value) {
+      var conditionCheck
+      if (typeGame === 2) { // X3
+        conditionCheck = selectedArray[0].value === selectedArray[1].value
+      } else {
+        conditionCheck = selectedArray[0].value === selectedArray[1].value && selectedArray[1].value === selectedArray[2].value
+      }
+      if (conditionCheck) {
         if (playSound) {
           this.soundArray[1].play()
         }
         score++
-        timeLeft += 2
+        timeLeft += typeGame // X3
         this.timeText.text = 'TIME\n' + timeLeft
         this.scoreText.text = 'SCORE\n' + score
-        selectedArray[0].destroy()
-        selectedArray[1].destroy()
-        tilesLeft -= 2
+        for (var i = 0; i < typeGame; i++) { // X3
+          selectedArray[i].destroy()
+        }
+        tilesLeft -= typeGame // X3
         if (tilesLeft === 0) {
           tilesArray.length = 0
           selectedArray.length = 0
@@ -152,6 +170,7 @@ window.onload = function () {
         }
         selectedArray[0].frame = 10
         selectedArray[1].frame = 10
+        selectedArray[2].frame = 10
       }
       selectedArray.length = 0
       this.checked = true
@@ -220,18 +239,23 @@ window.onload = function () {
       text.anchor.set(0.5)
       text.width = 1000
       text.height = 167
-      soundButton = game.add.button(game.width / 2 - 100, game.height / 2 + 250, 'soundIcons', this.soundGame, this)
-      soundButton.anchor.set(0.5)
-      soundButton.width = 120
-      soundButton.height = 120
-      screenButton = game.add.button(game.width / 2 + 100, game.height / 2 + 250, 'screenIcon', this.screenGame)
-      screenButton.anchor.set(0.5)
-      screenButton.width = 120
-      screenButton.height = 120
       var start = game.add.button(game.width / 2, game.height / 2 + 20, 'startIcon', this.startGame)
       start.anchor.set(0.5)
       start.width = 400
       start.height = 160
+      soundButton = game.add.button(game.width / 2 - 180, game.height / 2 + 250, 'soundIcons', this.soundGame, this)
+      soundButton.anchor.set(0.5)
+      soundButton.width = 120
+      soundButton.height = 120
+      screenButton = game.add.button(game.width / 2, game.height / 2 + 250, 'screenIcon', this.screenGame)
+      screenButton.anchor.set(0.5)
+      screenButton.width = 120
+      screenButton.height = 120
+      // X2 or X3
+      typeGameButton = game.add.button(game.width / 2 + 180, game.height / 2 + 250, 'typeGameIcon', this.styleGame)
+      typeGameButton.anchor.set(0.5)
+      typeGameButton.width = 120
+      typeGameButton.height = 120
     },
     soundGame: function (target) {
       if (target.frame === 1) {
@@ -242,13 +266,22 @@ window.onload = function () {
         soundButton.frame = 1
       }
     },
-    screenGame: function (target) {
+    screenGame: function () {
       if (game.scale.isFullScreen) {
         game.scale.stopFullScreen()
         screenButton.frame = 0
       } else {
         game.scale.startFullScreen(false)
         screenButton.frame = 1
+      }
+    },
+    styleGame: function (target) { // X2 or X3
+      if (target.frame === 1) {
+        typeGameButton.frame = 0
+        typeGame = 2
+      } else {
+        typeGameButton.frame = 1
+        typeGame = 3
       }
     },
     startGame: function (target) {
@@ -322,18 +355,13 @@ window.onload = function () {
   preloadAssets.prototype = {
     preload: function () {
       game.load.image('background', 'assets/sprites/background1.png')
-      game.load.spritesheet('tiles', 'assets/sprites/tiles.png', tileSize,
-        tileSize)
-      game.load.audio('select', ['assets/sounds/chipsCollide1.mp3',
-        'assets/sounds/chipsCollide2.ogg']) // CLICK
-      game.load.audio('right', ['assets/sounds/chipsCollide2.mp3',
-        'assets/sounds/chipsCollide2.ogg']) // BIEN
-      game.load.audio('wrong', ['assets/sounds/chipsCollide3.mp3',
-        'assets/sounds/chipsCollide3.ogg']) // MAL
-      game.load.spritesheet('soundIcons', 'assets/sprites/soundiconsLight.png', 200,
-        192)
-      game.load.spritesheet('screenIcon', 'assets/sprites/screenLight.png', 200,
-        192)
+      game.load.spritesheet('tiles', 'assets/sprites/tiles.png', tileSize, tileSize)
+      game.load.audio('select', ['assets/sounds/chipsCollide1.mp3', 'assets/sounds/chipsCollide2.ogg']) // CLICK
+      game.load.audio('right', ['assets/sounds/chipsCollide2.mp3', 'assets/sounds/chipsCollide2.ogg']) // BIEN
+      game.load.audio('wrong', ['assets/sounds/chipsCollide3.mp3', 'assets/sounds/chipsCollide3.ogg']) // MAL
+      game.load.spritesheet('soundIcons', 'assets/sprites/soundiconsLight.png', 200, 192)
+      game.load.spritesheet('screenIcon', 'assets/sprites/screenLight.png', 200, 192)
+      game.load.spritesheet('typeGameIcon', 'assets/sprites/typeGameButton.png', 200, 192)
     },
     create: function () {
       game.state.start('TitleScreen')
