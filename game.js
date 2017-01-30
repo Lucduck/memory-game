@@ -34,7 +34,7 @@ window.onload = function () {
       // console.log(game.world.centerX)
       // console.log(game.world.centerY)
       score = 0
-      timeLeft = 5
+      timeLeft = 60
       if (typeGame === 2) { // X3
         numRows = 4
         numCols = 5
@@ -91,7 +91,7 @@ window.onload = function () {
       this.timeText = game.add.text(game.width - 110, 92, 'TIME\n' + timeLeft, style)
       this.timeText.anchor.set(0.5)
       this.timeText.lineSpacing = 7
-      var counter = game.time.events.loop(Phaser.Timer.SECOND, this.decreaseTime, this) // Phaser.Timer.SECOND
+      var counter = game.time.events.loop(Phaser.Timer.SECOND, this.decreaseTime, this)
     },
     placeTiles: function () {
       tilesLeft = numRows * numCols
