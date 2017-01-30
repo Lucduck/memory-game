@@ -134,7 +134,7 @@ window.onload = function () {
         target.frame = target.value
         selectedArray.push(target)
       }
-      if (selectedArray.length === typeGame && checked === true) { // X3
+      if (selectedArray.length === typeGame && this.checked === true) { // X3
         this.checked = false
         game.time.events.add(500, this.checkTiles, this)
       }
@@ -168,9 +168,9 @@ window.onload = function () {
         if (playSound) {
           this.soundArray[2].play()
         }
-        selectedArray[0].frame = 10
-        selectedArray[1].frame = 10
-        selectedArray[2].frame = 10
+        for (var i = 0; i < typeGame; i++) { // X3
+          selectedArray[i].frame = 10
+        }
       }
       selectedArray.length = 0
       this.checked = true
