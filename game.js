@@ -1,6 +1,6 @@
 window.onload = function () {
   var typeGame
-  var tileSize = 80
+  var tileSize = 500
   var tileSizeScreen = 160
   var numRows
   var numCols
